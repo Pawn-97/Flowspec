@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "FLOW_BRANCH_001",
+      "profile": "core",
+      "category": "prototype-readiness",
+      "severity": "critical",
+      "name": "Every conditional branch must have a destination",
+      "check_type": "branch_destination_required",
+      "score_impact": { "deduct": 0, "cap": 0 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "If validation fails, show error.",
+      "fix": "Specify where the user stays, what changes, and how they recover."
+    },
+    {
+      "id": "ERROR_001",
+      "profile": "core",
+      "category": "prototype-readiness",
+      "severity": "critical",
+      "name": "Every error state needs recovery",
+      "check_type": "error_recovery_required",
+      "score_impact": { "deduct": 0, "cap": 0 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Display error message.",
+      "fix": "Define recovery action, destination, and return behavior."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1",
+  "result": {
+    "score": 84,
+    "status": "pass_with_minor_revision",
+    "blockers": 0
+  },
+  "summary": "The sample spec is suitable for handoff after minor completeness improvements.",
+  "issues": [
+    {
+      "id": "CRAFT_001",
+      "severity": "craft",
+      "category": "anti-slop-spec",
+      "evidence": "Some screen prototype instructions are concise and may need more interaction detail.",
+      "impact": "Prototype agent may underspecify microcopy and state transitions.",
+      "recommended_fix": "Expand prototype_instruction for the affected screens without adding new facts.",
+      "auto_fixable": true,
+      "requires_designer_confirmation": false,
+      "fix_type": "content_specificity"
+    }
+  ]
+}

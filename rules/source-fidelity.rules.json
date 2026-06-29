@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "SOURCE_001",
+      "profile": "core",
+      "category": "source-fidelity",
+      "severity": "critical",
+      "name": "Do not expand out-of-scope flows",
+      "check_type": "out_of_scope_not_expanded",
+      "score_impact": { "deduct": 0, "cap": 0 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Creating full screens for a prerequisite flow marked Not Doing.",
+      "fix": "Represent the item as an external exit or blocked state only."
+    },
+    {
+      "id": "SOURCE_002",
+      "profile": "core",
+      "category": "source-fidelity",
+      "severity": "critical",
+      "name": "Open questions cannot become confirmed decisions",
+      "check_type": "open_question_marked_needs_confirmation",
+      "score_impact": { "deduct": 0, "cap": 0 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Writing TBD US/TMO fields as confirmed form fields.",
+      "fix": "Mark affected content as Needs designer confirmation."
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "schema_version": "0.1",
+  "project": {
+    "id": "porting-automation-tango-tmo",
+    "name": "Porting Automation Tango TMO"
+  },
+  "source_snapshot": {
+    "state.md": "sample",
+    "ux-onepage.md": "sample",
+    "decisions.md": "sample",
+    "questions.md": "sample",
+    "memory/constraints.md": "sample"
+  },
+  "selected_flow": {
+    "id": "submit-uk-mobile-esim-port-request",
+    "name": "Submit UK Mobile-eSIM port request",
+    "goal": "Admin submits a UK Mobile-eSIM port request without opening a manual support ticket."
+  },
+  "product_context": {
+    "domain": "B2B telecom admin",
+    "surface": "admin portal",
+    "flow_type": "multi-step wizard plus status tracking entry",
+    "complexity": "high",
+    "primary_user": "admin",
+    "data_patterns": ["bulk input", "per-item validation", "carrier grouping", "blocked prerequisites", "draft recovery"]
+  },
+  "review_profiles": {
+    "primary": "b2b-admin",
+    "secondary": [
+      "multi-step-workflow",
+      "bulk-operations",
+      "data-table",
+      "async-status-tracking",
+      "blocked-prerequisite-recovery"
+    ],
+    "excluded": ["consumer-onboarding", "marketing-site", "visual-brand-exploration"],
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-06-29"
+  },
+  "flow_ui_grammar": {
+    "layout_patterns": [
+      {
+        "id": "wizard-decision-screen",
+        "used_for": ["select-number-type-country", "select-business-address"],
+        "intent": "Single decision step with primary selector and secondary prerequisite guidance."
+      },
+      {
+        "id": "bulk-workbench-screen",
+        "used_for": ["enter-port-in-numbers", "number-precheck-result", "assign-pac"],
+        "intent": "Input and parsed results visible together for batch correction."
+      },
+      {
+        "id": "blocked-prerequisite-screen",
+        "used_for": ["no-verified-address", "missing-subscriber"],
+        "intent": "Explain missing prerequisite, external exit, draft preservation, and return behavior."
+      },
+      {
+        "id": "review-submit-screen",
+        "used_for": ["review-port-request"],
+        "intent": "Grouped review summary with risk warnings before final submit."
+      },
+      {
+        "id": "status-entry-screen",
+        "used_for": ["submit-success", "carrier-fallback-ticket", "rejected-number-recovery"],
+        "intent": "Show submitted state, next tracking action, and recovery entry points."
+      }
+    ],
+    "component_families": [
+      "step progress indicator",
+      "selectable table/list",
+      "bulk input with parsed preview",
+      "per-item validation table",
+      "grouped review summary",
+      "blocked prerequisite callout",
+      "external exit action",
+      "save draft action",
+      "status timeline"
+    ],
+    "interaction_conventions": [
+      "Primary action remains stable across wizard steps.",
+      "Save draft remains available on collection and blocked steps.",
+      "Per-item errors appear next to affected items.",
+      "External exits never expand into in-flow creation wizards."
+    ],
+    "content_conventions": [
+      "Use admin task language.",
+      "Blocked states explain why the user cannot continue and how to recover.",
+      "Describe system automation as next user-visible outcome, not implementation internals."
+    ]
+  },
+  "steps": [
+    {
+      "id": "select-business-address-step",
+      "source_node": "Select verified business address",
+      "mapping_type": "one_to_one",
+      "proposed_targets": [
+        {
+          "id": "select-business-address",
+          "type": "screen",
+          "ux_intent": "Choose an existing verified address for the selected country.",
+          "layout_pattern_id": "wizard-decision-screen",
+          "component_families": ["selectable table/list", "blocked prerequisite callout", "external exit action"],
+          "layout_intent": {
+            "screen_archetype": "decision",
+            "primary_focus": "verified address selection",
+            "secondary_focus": "prerequisite guidance"
+          },
+          "risk_flags": ["blocked_prerequisite_possible"]
+        }
+      ],
+      "source_trace": [
+        {
+          "source_file": "ux-onepage.md",
+          "section": "16. 信息架构",
+          "claim": "Select existing verified business address; no address uses prompt exit, not creation flow.",
+          "source_type": "confirmed",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "collect-pac-step",
+      "source_node": "Collect PAC + port date",
+      "mapping_type": "one_to_many",
+      "mapping_reason": "PAC assignment and port date scheduling have different decision modes and validation risks.",
+      "proposed_targets": [
+        {
+          "id": "assign-pac",
+          "type": "screen",
+          "ux_intent": "Assign per-number or shared bulk PAC to eligible numbers.",
+          "layout_pattern_id": "bulk-workbench-screen",
+          "component_families": ["per-item validation table", "bulk input with parsed preview"],
+          "layout_intent": {
+            "screen_archetype": "workbench",
+            "primary_focus": "per-number PAC assignment",
+            "secondary_focus": "shared bulk PAC shortcut"
+          },
+          "risk_flags": ["bulk_operation", "per_item_validation"]
+        },
+        {
+          "id": "schedule-port-date",
+          "type": "screen",
+          "ux_intent": "Choose target port date with cutoff and PAC expiry awareness.",
+          "layout_pattern_id": "bulk-workbench-screen",
+          "component_families": ["per-item validation table"],
+          "layout_intent": {
+            "screen_archetype": "workbench",
+            "primary_focus": "date choice and eligibility warnings"
+          },
+          "risk_flags": ["cutoff_validation", "pac_expiry"]
+        }
+      ],
+      "source_trace": [
+        {
+          "source_file": "questions.md",
+          "section": "Answered Questions Q5/Q8",
+          "claim": "PAC supports per-number and shared/bulk modes; expiry is system-derived.",
+          "source_type": "confirmed",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "external_exits": [
+    {
+      "id": "external-business-address-documents",
+      "must_not_expand": true,
+      "return_behavior": "Resume draft from Port history after address verification.",
+      "source_trace": [
+        {
+          "source_file": "decisions.md",
+          "section": "D1/D4",
+          "claim": "Business address creation is outside this UX scope and represented only as a prompt exit.",
+          "source_type": "decision",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "out_of_scope_boundaries": [
+    {
+      "id": "subscriber-creation",
+      "how_represented": "external exit only",
+      "source_trace": [
+        {
+          "source_file": "decisions.md",
+          "section": "D3/D4",
+          "claim": "Subscriber creation is a prerequisite and not designed in this flow.",
+          "source_type": "decision",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "needs_confirmation": [
+    {
+      "id": "us-tmo-fields",
+      "reason": "Q1 is open and blocks US detailed fields only.",
+      "blocking": false,
+      "source_trace": [
+        {
+          "source_file": "questions.md",
+          "section": "Open Questions Q1",
+          "claim": "US/TMO collection fields and mechanism are still open.",
+          "source_type": "open_question",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "confirmation": {
+    "status": "confirmed",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-06-29"
+  }
+}

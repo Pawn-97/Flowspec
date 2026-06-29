@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "SLOP_001",
+      "profile": "core",
+      "category": "anti-slop-spec",
+      "severity": "craft",
+      "name": "Avoid generic header-form-continue screens",
+      "check_type": "qualitative",
+      "score_impact": { "deduct": 4 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Every screen has the same flat structure with no decision hierarchy.",
+      "fix": "Use task-specific layout intent and component roles tied to user decisions."
+    },
+    {
+      "id": "SLOP_002",
+      "profile": "core",
+      "category": "anti-slop-spec",
+      "severity": "craft",
+      "name": "Prototype instructions must be concrete",
+      "check_type": "prototype_instruction_specificity",
+      "score_impact": { "deduct": 4 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Build this screen.",
+      "fix": "Specify required screen behavior, visible state, and interaction focus."
+    }
+  ]
+}

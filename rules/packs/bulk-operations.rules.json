@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "bulk-operations",
+  "rules": [
+    {
+      "id": "B2B_BULK_001",
+      "category": "bulk-operations",
+      "severity": "high",
+      "name": "Bulk operations must define per-item handling",
+      "check_type": "bulk_per_item_handling_required",
+      "score_impact": { "deduct": 8, "cap": 79 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Submit all numbers and show a generic error.",
+      "fix": "Define per-item success, failure reason, retry path, and partial success behavior."
+    }
+  ]
+}

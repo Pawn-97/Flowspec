@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowspec.local/schemas/ux-flow-spec.schema.json",
+  "type": "object",
+  "required": ["schema_version", "project", "flow", "review_profiles", "flow_ui_grammar", "screens"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "project": { "type": "object", "required": ["id"], "additionalProperties": true },
+    "flow": { "type": "object", "required": ["id", "name", "goal"], "additionalProperties": true },
+    "review_profiles": { "type": "object", "required": ["primary", "secondary", "excluded"], "additionalProperties": true },
+    "flow_ui_grammar": { "type": "object", "required": ["layout_patterns", "component_families"], "additionalProperties": true },
+    "source_context": { "type": "object", "additionalProperties": true },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "type",
+          "layout_pattern_id",
+          "source_trace",
+          "page_purpose",
+          "components",
+          "interactions",
+          "states",
+          "validations",
+          "prototype_instruction"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "type": { "type": "string" },
+          "layout_pattern_id": { "type": "string" },
+          "source_trace": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceTrace" } },
+          "user_intent": { "type": "string" },
+          "page_purpose": { "type": "string" },
+          "content_structure": { "type": "object", "additionalProperties": true },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "component_family", "role"],
+              "properties": {
+                "id": { "type": "string" },
+                "type": { "type": "string" },
+                "component_family": { "type": "string" },
+                "role": { "type": "string" },
+                "data": { "type": "object", "additionalProperties": true },
+                "states": { "type": "array", "items": { "type": "string" } },
+                "content": { "type": "object", "additionalProperties": true },
+                "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
+              },
+              "additionalProperties": true
+            }
+          },
+          "interactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "trigger", "result", "destination"],
+              "properties": {
+                "id": { "type": "string" },
+                "trigger": { "type": "string" },
+                "condition": { "type": "string" },
+                "result": { "type": "string" },
+                "destination": { "type": "string" },
+                "failure_behavior": { "type": "string" },
+                "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
+              },
+              "additionalProperties": true
+            }
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "message"],
+              "properties": {
+                "id": { "type": "string" },
+                "type": { "type": "string" },
+                "message": { "type": "string" },
+                "recovery": { "type": "object", "additionalProperties": true },
+                "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
+              },
+              "additionalProperties": true
+            }
+          },
+          "validations": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+          "prototype_instruction": { "type": "string" },
+          "out_of_scope_notes": { "type": "array", "items": { "type": "string" } },
+          "needs_confirmation": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+          "deviation_reason": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "state_matrix": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "validation_matrix": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "branch_matrix": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "prototype_requirements": { "type": "object", "additionalProperties": true },
+    "out_of_scope_items": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "sourceTrace": {
+      "type": "object",
+      "required": ["source_file", "section", "claim"],
+      "properties": {
+        "source_file": { "type": "string" },
+        "section": { "type": "string" },
+        "claim": { "type": "string" },
+        "source_type": { "type": "string" },
+        "confidence": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

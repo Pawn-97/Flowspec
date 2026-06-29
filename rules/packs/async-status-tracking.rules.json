@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "async-status-tracking",
+  "rules": [
+    {
+      "id": "ASYNC_001",
+      "category": "async-status-tracking",
+      "severity": "high",
+      "name": "Async system actions must expose status and next user action",
+      "check_type": "async_status_visibility_required",
+      "score_impact": { "deduct": 8, "cap": 79 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "System submits in the background.",
+      "fix": "Define visible status, user expectation, next action, and fallback behavior."
+    }
+  ]
+}

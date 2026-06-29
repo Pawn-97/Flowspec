@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowspec.local/schemas/ux-flow-spec-review.schema.json",
+  "type": "object",
+  "required": ["schema_version", "result", "issues"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "result": {
+      "type": "object",
+      "required": ["score", "status", "blockers"],
+      "properties": {
+        "score": { "type": "number" },
+        "status": { "type": "string" },
+        "blockers": { "type": "integer" }
+      },
+      "additionalProperties": true
+    },
+    "summary": { "type": "string" },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "category", "evidence", "impact", "recommended_fix", "auto_fixable", "requires_designer_confirmation"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "type": "string" },
+          "category": { "type": "string" },
+          "evidence": { "type": "string" },
+          "impact": { "type": "string" },
+          "recommended_fix": { "type": "string" },
+          "auto_fixable": { "type": "boolean" },
+          "requires_designer_confirmation": { "type": "boolean" },
+          "fix_type": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

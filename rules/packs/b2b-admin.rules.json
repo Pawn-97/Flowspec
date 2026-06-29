@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "b2b-admin",
+  "rules": [
+    {
+      "id": "B2B_REVIEW_001",
+      "category": "b2b-admin-craft",
+      "severity": "high",
+      "name": "High-risk admin submissions need review before submit",
+      "check_type": "review_before_submit_required",
+      "score_impact": { "deduct": 8, "cap": 79 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Submitting a carrier request immediately after data entry.",
+      "fix": "Add a review step with grouped summary, warnings, and final confirmation."
+    }
+  ]
+}

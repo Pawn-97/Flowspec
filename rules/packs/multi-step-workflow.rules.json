@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "multi-step-workflow",
+  "rules": [
+    {
+      "id": "WIZARD_001",
+      "category": "multi-step-workflow",
+      "severity": "high",
+      "name": "Multi-step flows need progress, back behavior, and save/resume policy",
+      "check_type": "wizard_navigation_required",
+      "score_impact": { "deduct": 8, "cap": 79 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "A sequence of screens with only Continue actions.",
+      "fix": "Define progress, back behavior, save draft availability, and resume entry."
+    }
+  ]
+}

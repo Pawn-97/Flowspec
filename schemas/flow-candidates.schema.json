@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowspec.local/schemas/flow-candidates.schema.json",
+  "type": "object",
+  "required": ["schema_version", "project", "candidates"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "project": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "entry", "exit", "source_trace"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "entry": { "type": "string" },
+          "exit": { "type": "string" },
+          "related_jtbds": { "type": "array", "items": { "type": "string" } },
+          "complexity": { "type": "string" },
+          "priority": { "type": "string" },
+          "reason": { "type": "string" },
+          "source_trace": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/sourceTrace" }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "sourceTrace": {
+      "type": "object",
+      "required": ["source_file", "section", "claim"],
+      "properties": {
+        "source_file": { "type": "string" },
+        "section": { "type": "string" },
+        "claim": { "type": "string" },
+        "source_type": { "type": "string" },
+        "confidence": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

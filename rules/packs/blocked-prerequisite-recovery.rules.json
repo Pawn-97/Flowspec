@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "blocked-prerequisite-recovery",
+  "rules": [
+    {
+      "id": "BLOCKED_001",
+      "category": "blocked-prerequisite-recovery",
+      "severity": "high",
+      "name": "Blocked prerequisites need external exit and return behavior",
+      "check_type": "blocked_prerequisite_recovery_required",
+      "score_impact": { "deduct": 8, "cap": 79 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Tell the user to create a prerequisite elsewhere.",
+      "fix": "Specify what is missing, where to fix it, whether draft is saved, and how the user returns."
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowspec.local/schemas/flow-prep.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "selected_flow",
+    "product_context",
+    "review_profiles",
+    "flow_ui_grammar",
+    "steps",
+    "confirmation"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "project": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "selected_flow": {
+      "type": "object",
+      "required": ["id", "name", "goal"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "goal": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "product_context": { "type": "object", "additionalProperties": true },
+    "review_profiles": {
+      "type": "object",
+      "required": ["primary", "secondary", "excluded", "confirmed_by_user"],
+      "properties": {
+        "primary": { "type": "string" },
+        "secondary": { "type": "array", "items": { "type": "string" } },
+        "excluded": { "type": "array", "items": { "type": "string" } },
+        "confirmed_by_user": { "type": "boolean" },
+        "confirmed_at": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "flow_ui_grammar": {
+      "type": "object",
+      "required": ["layout_patterns", "component_families", "interaction_conventions", "content_conventions"],
+      "properties": {
+        "layout_patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "intent"],
+            "properties": {
+              "id": { "type": "string" },
+              "used_for": { "type": "array", "items": { "type": "string" } },
+              "intent": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "component_families": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "interaction_conventions": { "type": "array", "items": { "type": "string" } },
+        "content_conventions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "source_node", "mapping_type", "proposed_targets", "source_trace"],
+        "properties": {
+          "id": { "type": "string" },
+          "source_node": { "type": "string" },
+          "mapping_type": {
+            "enum": [
+              "one_to_one",
+              "one_to_many",
+              "many_to_one",
+              "node_to_state",
+              "node_to_system_action",
+              "node_to_external_exit",
+              "node_to_terminal_outcome"
+            ]
+          },
+          "mapping_reason": { "type": "string" },
+          "proposed_targets": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "ux_intent"],
+              "properties": {
+                "id": { "type": "string" },
+                "type": { "type": "string" },
+                "ux_intent": { "type": "string" },
+                "layout_pattern_id": { "type": "string" },
+                "component_families": { "type": "array", "items": { "type": "string" } },
+                "layout_intent": { "type": "object", "additionalProperties": true },
+                "risk_flags": { "type": "array", "items": { "type": "string" } }
+              },
+              "additionalProperties": true
+            }
+          },
+          "source_trace": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceTrace" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "external_exits": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "out_of_scope_boundaries": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "needs_confirmation": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "confirmation": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string" },
+        "confirmed_by_user": { "type": "boolean" },
+        "confirmed_at": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "sourceTrace": {
+      "type": "object",
+      "required": ["source_file", "section", "claim"],
+      "properties": {
+        "source_file": { "type": "string" },
+        "section": { "type": "string" },
+        "claim": { "type": "string" },
+        "source_type": { "type": "string" },
+        "confidence": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

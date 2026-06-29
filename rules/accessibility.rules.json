@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "A11Y_001",
+      "profile": "core",
+      "category": "accessibility",
+      "severity": "medium",
+      "name": "State cannot rely only on color",
+      "check_type": "state_text_required",
+      "score_impact": { "deduct": 3 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Rows only indicate status by color.",
+      "fix": "Define visible status labels and screen-reader-understandable messages."
+    }
+  ]
+}

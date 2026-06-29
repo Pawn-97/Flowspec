@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "profile": "data-table",
+  "rules": [
+    {
+      "id": "TABLE_001",
+      "category": "data-table",
+      "severity": "medium",
+      "name": "Tables must define columns, row actions, and states",
+      "check_type": "table_structure_required",
+      "score_impact": { "deduct": 5 },
+      "evidence_required": true,
+      "fix_required": true,
+      "bad_pattern": "Show a table of results.",
+      "fix": "Specify columns, row actions, selection behavior, empty/loading/error states, and overflow handling."
+    }
+  ]
+}

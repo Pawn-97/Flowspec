@@ -1,0 +1,22 @@
+{
+  "name": "flowspec",
+  "version": "0.1.0",
+  "description": "Compile confirmed UX discovery into prototype-ready UX Flow Specs.",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Flowspec",
+    "shortDescription": "Generate traceable UX Flow Specs from UX-partner outputs.",
+    "longDescription": "Flowspec compiles confirmed UX discovery into prototype-ready UX Flow Specs with traceability, deterministic validation, and B2B craft review.",
+    "developerName": "Local developer",
+    "category": "Productivity",
+    "capabilities": [
+      "UX specification",
+      "B2B workflow review",
+      "Prototype handoff"
+    ],
+    "defaultPrompt": "Use Flowspec to prepare a UX Flow Spec from a confirmed UX-partner project."
+  }
+}
