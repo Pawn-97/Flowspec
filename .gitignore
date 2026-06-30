@@ -2,3 +2,10 @@ node_modules/
 .DS_Store
 flow-spec/
 *.log
+
+# Local planning notes and copied source artifacts
+/SHADCN_DOWNSTREAM_USAGE.md
+/V0.1_UPGRADE_PLAN.md
+/.agents/skills/
+/examples/porting-automation-tango-tmo/
+/porting-automation-tango-tmo/
