@@ -36,10 +36,8 @@ function minimalSpec() {
       expansion_policy: "Alternate and recovery paths require explicit follow-up expansion."
     },
     prototype_surface: {
-      ui_library: "shadcn",
-      target_selection_order: ["block", "component", "custom"],
-      block_strategy: "Prefer a suitable shadcn block before component composition.",
-      skeleton_status: "none"
+      skeleton_status: "none",
+      implementation_guidance: "Use any suitable design system while preserving FlowSpec intent."
     },
     artifact_contract: {
       canonical_source: "flow-spec/ux-flow-spec.json",
@@ -49,15 +47,14 @@ function minimalSpec() {
     acceptance_contract: {
       implementation_evidence_required: [
         "component_id",
-        "implemented_shadcn_block_or_component",
-        "deviation_from_requested_shadcn_target",
-        "custom_reason_when_custom"
+        "implemented_ui_mapping",
+        "deviation_from_requested_implementation_target"
       ],
       checks: [
         "every_happy_path_step_screen_is_implemented",
         "every_required_component_has_mapping",
-        "block_targets_attempted_before_component_composition",
-        "custom_components_require_custom_reason",
+        "design_system_choice_is_not_prescribed",
+        "implementation_deviations_are_reported",
         "excluded_paths_not_implemented",
         "no_backend_or_api_integration"
       ]
@@ -83,10 +80,10 @@ function minimalSpec() {
             type: "table",
             component_family: "selectable table/list",
             role: "Show selectable rows.",
-            shadcn_target: {
-              strategy: "block",
-              targets: ["sidebar-07"],
-              fallback: "component_composition_allowed"
+            implementation_target: {
+              strategy: "compose",
+              target_role: "selectable data table",
+              interaction_shape: "row selection with validation state"
             }
           }
         ],
@@ -107,7 +104,7 @@ function messages(result) {
   return result.errors.map((error) => error.message).join("\n");
 }
 
-test("ux flow spec schema accepts v0.1 contracts and shadcn targets", async () => {
+test("ux flow spec schema accepts v0.1 contracts and implementation targets", async () => {
   const result = await validate(minimalSpec());
 
   assert.equal(result.valid, true, messages(result));
@@ -133,28 +130,50 @@ test("ux flow spec schema limits screen path roles", async () => {
   assert.match(messages(result), /must be equal to one of the allowed values/);
 });
 
-test("ux flow spec schema requires component shadcn targets", async () => {
+test("ux flow spec schema requires component implementation targets", async () => {
   const spec = minimalSpec();
-  delete spec.screens[0].components[0].shadcn_target;
+  delete spec.screens[0].components[0].implementation_target;
 
   const result = await validate(spec);
 
   assert.equal(result.valid, false);
-  assert.match(messages(result), /must have required property 'shadcn_target'/);
+  assert.match(messages(result), /must have required property 'implementation_target'/);
 });
 
-test("ux flow spec schema requires custom shadcn targets to explain why", async () => {
+test("ux flow spec schema rejects legacy shadcn targets", async () => {
   const spec = minimalSpec();
   spec.screens[0].components[0].shadcn_target = {
-    strategy: "custom",
-    targets: ["custom-bulk-editor"],
+    strategy: "component",
+    targets: ["table"],
     fallback: "component_composition_allowed"
   };
 
   const result = await validate(spec);
 
   assert.equal(result.valid, false);
-  assert.match(messages(result), /must have required property 'custom_reason'/);
+  assert.match(messages(result), /must NOT be valid/);
+});
+
+test("ux flow spec schema requires implementation targets to describe target role", async () => {
+  const spec = minimalSpec();
+  spec.screens[0].components[0].implementation_target = {
+    strategy: "custom"
+  };
+
+  const result = await validate(spec);
+
+  assert.equal(result.valid, false);
+  assert.match(messages(result), /must have required property 'target_role'/);
+});
+
+test("ux flow spec schema rejects design system selection fields", async () => {
+  const spec = minimalSpec();
+  spec.prototype_surface.ui_library = "shadcn";
+
+  const result = await validate(spec);
+
+  assert.equal(result.valid, false);
+  assert.match(messages(result), /must NOT be valid/);
 });
 
 test("ux flow spec schema limits acceptance check identifiers", async () => {

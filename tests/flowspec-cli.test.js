@@ -113,7 +113,7 @@ test("golden source of truth can be reviewed, revised, and handed off determinis
     assert.match(handoff, /## Prototype Surface/);
     assert.match(handoff, /## Implementation Evidence Required/);
     assert.match(handoff, /every_required_component_has_mapping/);
-    assert.match(handoff, /shadcn_target/);
+    assert.match(handoff, /implementation_target/);
   } finally {
     await rm(tempRoot, { recursive: true, force: true });
   }

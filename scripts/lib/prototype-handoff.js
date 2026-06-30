@@ -11,10 +11,9 @@ function contractItemLabel(item) {
   return item.description ? `${item.id}: ${item.description}` : item.id;
 }
 
-function shadcnTargetLabel(target = {}) {
-  const targets = (target.targets || []).join(", ") || "none";
-  const parts = [`strategy=${text(target.strategy)}`, `targets=${targets}`, `fallback=${text(target.fallback)}`];
-  if (target.custom_reason) parts.push(`custom_reason=${target.custom_reason}`);
+function implementationTargetLabel(target = {}) {
+  const parts = [`strategy=${text(target.strategy)}`, `target_role=${text(target.target_role)}`];
+  if (target.interaction_shape) parts.push(`interaction_shape=${target.interaction_shape}`);
   if (target.notes) parts.push(`notes=${target.notes}`);
   return parts.join("; ");
 }
@@ -54,11 +53,11 @@ export function renderPrototypeHandoff(spec) {
 
   lines.push("## Prototype Surface");
   lines.push("");
-  lines.push(`- UI library: ${text(spec.prototype_surface?.ui_library)}`);
-  lines.push(`- Target selection order: ${(spec.prototype_surface?.target_selection_order || []).join(" -> ") || "Not specified"}`);
-  lines.push(`- Block strategy: ${text(spec.prototype_surface?.block_strategy)}`);
   lines.push(`- Skeleton status: ${text(spec.prototype_surface?.skeleton_status)}`);
   if (spec.prototype_surface?.skeleton_id) lines.push(`- Skeleton id: ${spec.prototype_surface.skeleton_id}`);
+  if (spec.prototype_surface?.implementation_guidance) {
+    lines.push(`- Implementation guidance: ${spec.prototype_surface.implementation_guidance}`);
+  }
   lines.push("");
 
   lines.push("## Screens");
@@ -70,7 +69,7 @@ export function renderPrototypeHandoff(spec) {
     lines.push(`- Path role: ${screen.path_role}`);
     lines.push(`- Purpose: ${screen.page_purpose}`);
     lines.push("- Components:");
-    lines.push(...list(screen.components, (component) => `  - ${component.id}: ${component.component_family}; ${shadcnTargetLabel(component.shadcn_target)}`));
+    lines.push(...list(screen.components, (component) => `  - ${component.id}: ${component.component_family}; ${implementationTargetLabel(component.implementation_target)}`));
     lines.push("- Interactions:");
     lines.push(...list(screen.interactions, (interaction) => `  - ${interaction.id}: ${interaction.trigger} -> ${interaction.destination}`));
     lines.push("- States:");
@@ -80,9 +79,10 @@ export function renderPrototypeHandoff(spec) {
 
   lines.push("## Agent Instructions");
   lines.push("");
-  lines.push("- Prefer a suitable shadcn block before composing individual shadcn/ui components.");
-  lines.push("- Use a custom component only when no suitable shadcn block or component fits, and report `custom_reason`.");
-  lines.push("- Report deviations from each requested `shadcn_target`.");
+  lines.push("- Use any suitable design system or component library available in the downstream prototype repository.");
+  lines.push("- Preserve each FlowSpec component's role, interaction shape, states, and validation behavior.");
+  lines.push("- Report the concrete implementation mapping for each requested `implementation_target`.");
+  lines.push("- Report material deviations from FlowSpec intent.");
   lines.push("- Do not implement excluded paths or out-of-scope items.");
   lines.push("");
 

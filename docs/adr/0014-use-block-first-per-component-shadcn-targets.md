@@ -1,3 +1,7 @@
+---
+status: superseded by ADR-0017
+---
+
 # Use block-first per-component shadcn targets
 
 Flowspec v0.1 will map concrete FlowSpec components to explicit downstream UI targets. The mapping order is shadcn block first, shadcn/ui component second, and custom component only when shadcn has no suitable block or component. Each concrete component will carry a `shadcn_target` with `strategy`, `targets`, `fallback`, and optional `notes`; `strategy` is limited to `block`, `component`, or `custom`. When `strategy` is `custom`, `custom_reason` is required so downstream agents cannot bypass shadcn without explaining the gap. This makes the prototype agent's UI choices actionable while preserving room for custom components when shadcn does not cover the needed interaction.

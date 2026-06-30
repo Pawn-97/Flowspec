@@ -8,7 +8,7 @@ This skeleton is reference-only until explicitly approved. It must not be treate
 
 - Intended extraction source: Admin portal keyscreen Figma reference.
 - Current repo evidence: no Figma URL or node id is stored in this repository.
-- Basis for this draft: confirmed Flowspec v0.1 boundary, admin portal product context, and shadcn block-first handoff contract.
+- Basis for this draft: confirmed Flowspec v0.1 boundary, admin portal product context, and design-system-agnostic prototype handoff contract.
 
 ## Page Shell
 
@@ -31,16 +31,16 @@ This skeleton is reference-only until explicitly approved. It must not be treate
 - Secondary region: prerequisites, warnings, recovery actions, or summary metadata.
 - Footer/action region: stable primary action, secondary action, and draft or cancel affordances when specified by JSON.
 
-## Shadcn Strategy
+## Implementation Strategy
 
-- Prefer a suitable shadcn block for the overall admin shell.
-- Compose shadcn/ui components for concrete FlowSpec components when no block fits.
-- Use custom components only when `shadcn_target.strategy` is `custom` and the FlowSpec provides `custom_reason`.
-- Do not include shadcn installation commands in generated handoff.
+- Use any suitable design system or component library available in the downstream prototype repository.
+- Preserve each FlowSpec component's role, interaction shape, states, validation behavior, and recovery paths.
+- Use custom implementation only when the downstream repository has no suitable existing pattern for the required interaction.
+- Do not include design system installation commands in generated handoff.
 
 ## Component Mapping Defaults
 
-- Tables: use shadcn/ui table with badges and row actions for per-item state.
+- Tables: use a dense data table pattern with status markers and row actions for per-item state.
 - Bulk input: use textarea or form field composition with adjacent parsed preview.
 - Blocked prerequisite: use alert or callout composition with explicit external action.
 - Review summary: use card, table, alert, and button composition.
@@ -55,6 +55,6 @@ This skeleton is reference-only until explicitly approved. It must not be treate
 
 ## Open Review Questions
 
-- Which exact shadcn admin block should be the preferred shell target?
+- Which admin shell pattern should be the preferred reference when a downstream repository has multiple options?
 - Should future approved specs set `prototype_surface.skeleton_id` to `admin-portal` by default?
 - Which nav destinations should be mandatory versus context-specific?

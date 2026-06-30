@@ -29,7 +29,7 @@ It must include:
 - `Acceptance Checklist`
 - `Evidence Summary`
 
-The handoff should list shadcn targets and rules, not installation commands.
+The handoff should list implementation targets and evidence requirements, not design system choices or installation commands.
 
 `prototype-agent-prompt.md`, `prototype-brief.md`, and `prototype-brief.draft.md` are not default outputs.
 

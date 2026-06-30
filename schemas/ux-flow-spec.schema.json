@@ -61,18 +61,19 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "type", "component_family", "role", "shadcn_target"],
+              "required": ["id", "type", "component_family", "role", "implementation_target"],
               "properties": {
                 "id": { "type": "string" },
                 "type": { "type": "string" },
                 "component_family": { "type": "string" },
                 "role": { "type": "string" },
-                "shadcn_target": { "$ref": "#/$defs/shadcnTarget" },
+                "implementation_target": { "$ref": "#/$defs/implementationTarget" },
                 "data": { "type": "object", "additionalProperties": true },
                 "states": { "type": "array", "items": { "type": "string" } },
                 "content": { "type": "object", "additionalProperties": true },
                 "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
               },
+              "not": { "required": ["shadcn_target"] },
               "additionalProperties": true
             }
           },
@@ -147,19 +148,21 @@
     },
     "prototypeSurface": {
       "type": "object",
-      "required": ["ui_library", "target_selection_order", "block_strategy", "skeleton_status"],
+      "required": ["skeleton_status"],
       "properties": {
-        "ui_library": { "type": "string" },
-        "target_selection_order": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "type": "string" }
-        },
-        "block_strategy": { "type": "string" },
         "skeleton_status": {
           "type": "string",
           "enum": ["none", "draft_pending_user_approval", "approved_default"]
-        }
+        },
+        "skeleton_id": { "type": "string" },
+        "implementation_guidance": { "type": "string" }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["ui_library"] },
+          { "required": ["target_selection_order"] },
+          { "required": ["block_strategy"] }
+        ]
       },
       "additionalProperties": true
     },
@@ -216,38 +219,24 @@
       "enum": [
         "every_happy_path_step_screen_is_implemented",
         "every_required_component_has_mapping",
-        "block_targets_attempted_before_component_composition",
-        "custom_components_require_custom_reason",
+        "design_system_choice_is_not_prescribed",
+        "implementation_deviations_are_reported",
         "excluded_paths_not_implemented",
         "no_backend_or_api_integration"
       ]
     },
-    "shadcnTarget": {
+    "implementationTarget": {
       "type": "object",
-      "required": ["strategy", "targets", "fallback"],
+      "required": ["strategy", "target_role"],
       "properties": {
         "strategy": {
           "type": "string",
-          "enum": ["block", "component", "custom"]
+          "enum": ["reuse_existing", "compose", "custom"]
         },
-        "targets": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "type": "string" }
-        },
-        "fallback": { "type": "string" },
-        "notes": { "type": "string" },
-        "custom_reason": { "type": "string" }
+        "target_role": { "type": "string" },
+        "interaction_shape": { "type": "string" },
+        "notes": { "type": "string" }
       },
-      "allOf": [
-        {
-          "if": {
-            "properties": { "strategy": { "const": "custom" } },
-            "required": ["strategy"]
-          },
-          "then": { "required": ["custom_reason"] }
-        }
-      ],
       "additionalProperties": true
     },
     "contractItem": {

@@ -17,24 +17,24 @@ A deterministic rendered view of `ux-flow-spec.json` for downstream prototype ag
 _Avoid_: prototype brief draft, manually polished handoff, separate prototype agent prompt
 
 **Implementation evidence**:
-The downstream prototype agent's reported mapping from each FlowSpec component to the implemented shadcn block, shadcn/ui component, or custom component.
-_Avoid_: trust-only implementation, unverifiable component choice
+The downstream prototype agent's reported mapping from each FlowSpec component to the concrete UI it implemented, including any material deviations from the FlowSpec. It must not require a specific design system, component library, or frontend stack.
+_Avoid_: shadcn evidence, trust-only implementation, unverifiable component choice
 
 **Internal audit directory**:
 A non-default output directory for preparation records, validation reports, review notes, full traceability, human-readable FlowSpec views, and revision history. Preparation files may still require user review, but they are not downstream handoff files.
 _Avoid_: downstream package, delivery folder
 
-**Shadcn handoff constraints**:
-Prototype-facing guidance that tells downstream agents to prefer shadcn/ui components and dashboard/sidebar blocks without hard-coding framework setup commands or package-manager choices.
-_Avoid_: design system generation, frontend implementation plan, mandatory install script
+**Prototype implementation guidance**:
+Prototype-facing guidance that helps downstream agents preserve FlowSpec intent without prescribing a design system, component library, frontend stack, setup commands, or package-manager choices.
+_Avoid_: shadcn handoff constraints, design system contract, frontend implementation plan, mandatory install script
 
 **Prototype surface**:
-The source-of-truth JSON section that describes downstream prototype constraints, including UI library preference, target selection order, skeleton choice, and block strategy. Concrete shadcn or custom targets live on individual components.
+The source-of-truth JSON section that describes downstream prototype boundaries such as skeleton choice, artifact expectations, and implementation guidance. It must not make shadcn or any other design system the required target.
 _Avoid_: markdown-only handoff rules, implementation setup
 
-**Shadcn target**:
-The explicit downstream implementation target for a concrete FlowSpec component, represented as `strategy`, `targets`, `fallback`, and optional `notes`. FlowSpec should prefer a suitable shadcn block first, then suitable shadcn/ui components, and only then mark a custom component target when shadcn has no good fit; custom targets require a `custom_reason`.
-_Avoid_: component-family-only mapping, unspecified UI target
+**Implementation target**:
+An optional downstream implementation hint for a concrete FlowSpec component, expressed in design-system-agnostic terms. It may describe the intended UI role or interaction shape, but it must not require a named library such as shadcn.
+_Avoid_: shadcn target, component-library mandate, unspecified UI intent
 
 **Artifact contract**:
 The source-of-truth JSON section that declares which files belong to downstream handoff and which files belong to internal audit.

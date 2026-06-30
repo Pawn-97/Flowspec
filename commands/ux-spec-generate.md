@@ -19,7 +19,7 @@ Generate the UX Flow Spec JSON from confirmed flow prep.
 - Every screen must include one approved `path_role`.
 - Every screen must reference a `layout_pattern_id`.
 - Every component must use an allowed abstract `component_family`.
-- Every concrete component must include `shadcn_target`.
+- Every concrete component must include `implementation_target`.
 - Every screen must include source trace.
 - Every branch must include a destination.
 - Every error state must include recovery.

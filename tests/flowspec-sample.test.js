@@ -63,7 +63,10 @@ test("ux flow spec validates source trace and flow consistency", async () => {
     assert.ok(screen.source_trace.length > 0, `${screen.id} missing source trace`);
     assert.ok(screen.layout_pattern_id, `${screen.id} missing layout pattern`);
     assert.equal(screen.path_role, "happy_path_step");
-    assert.ok(screen.components.every((component) => component.shadcn_target), `${screen.id} missing shadcn target`);
+    assert.ok(
+      screen.components.every((component) => component.implementation_target),
+      `${screen.id} missing implementation target`
+    );
   }
 
   const consistencyIssues = lintFlowConsistency(spec);
