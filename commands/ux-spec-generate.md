@@ -4,8 +4,8 @@ Generate the UX Flow Spec JSON from confirmed flow prep.
 
 ## Preconditions
 
-- `flow-spec/flow-prep.json` exists.
-- `flow-spec/flow-prep.md` has been designer-confirmed.
+- `flow-spec/_internal/flow-prep.json` exists.
+- `flow-spec/_internal/flow-prep.md` has been designer-confirmed.
 - Source snapshot has not materially changed, or the flow prep has been regenerated.
 
 ## Generate
@@ -15,8 +15,11 @@ Generate the UX Flow Spec JSON from confirmed flow prep.
 ## Rules
 
 - Inherit `flow_ui_grammar` from `flow-prep.json`.
+- Include top-level `path_scope`, `prototype_surface`, `artifact_contract`, and `acceptance_contract`.
+- Every screen must include one approved `path_role`.
 - Every screen must reference a `layout_pattern_id`.
 - Every component must use an allowed abstract `component_family`.
+- Every concrete component must include `shadcn_target`.
 - Every screen must include source trace.
 - Every branch must include a destination.
 - Every error state must include recovery.
@@ -24,14 +27,13 @@ Generate the UX Flow Spec JSON from confirmed flow prep.
 - Every out-of-scope item must remain unexpanded.
 - Any deviation from flow prep needs `deviation_reason`.
 
-## Render
+## Internal Render
 
-After JSON generation, run:
+After JSON generation, refresh internal audit views:
 
 ```bash
-node scripts/render-flowspec-md.js flow-spec/ux-flow-spec.json --out flow-spec/ux-flow-spec.md
-node scripts/generate-traceability.js flow-spec/ux-flow-spec.json --out flow-spec/traceability.md
-node scripts/generate-prototype-brief.js flow-spec/ux-flow-spec.json --out flow-spec/prototype-brief.draft.md
+node scripts/render-flowspec-md.js flow-spec/ux-flow-spec.json --out flow-spec/_internal/ux-flow-spec.md
+node scripts/generate-traceability.js flow-spec/ux-flow-spec.json --out flow-spec/_internal/traceability.md
 ```
 
-Append `revision-log.md`.
+Append `flow-spec/_internal/revision-log.md`.

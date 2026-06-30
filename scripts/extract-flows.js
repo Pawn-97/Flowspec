@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import path from "node:path";
-import { parseNamedArg, writeJson, writeText } from "./lib/io.js";
+import { internalDir, parseNamedArg, writeJson, writeText } from "./lib/io.js";
 import { loadSourceBundle, trace } from "./lib/source-bundle.js";
 
 const projectPath = process.argv[2];
-const outDir = parseNamedArg(process.argv, "--out-dir") || path.join(projectPath || "", "flow-spec");
+const flowSpecDir = parseNamedArg(process.argv, "--out-dir") || path.join(projectPath || "", "flow-spec");
+const outDir = internalDir(flowSpecDir);
 
 if (!projectPath) {
   console.error("Usage: node scripts/extract-flows.js <project-path> [--out-dir flow-spec]");
@@ -24,6 +25,30 @@ function extractCandidate(bundle) {
     exit: /Port history/i.test(text)
       ? "Submit success with order ID and Port history tracking entry"
       : "Confirmed terminal outcome",
+    success_exit: /Port history/i.test(text)
+      ? "Submit success with order ID and Port history tracking entry"
+      : "Confirmed terminal outcome",
+    default_path_scope: "happy_path",
+    included_guardrails: [
+      {
+        id: "blocked-prerequisite-recovery",
+        description: "Retain prerequisite blocked states as guardrails without expanding external setup flows."
+      },
+      {
+        id: "per-item-validation-recovery",
+        description: "Retain row-level correction and recovery states for bulk number validation."
+      }
+    ],
+    excluded_paths: [
+      {
+        id: "business-address-creation",
+        description: "Address creation remains an external exit, not an in-flow prototype path."
+      },
+      {
+        id: "subscriber-creation",
+        description: "Subscriber creation remains a prerequisite outside this selected flow."
+      }
+    ],
     related_jtbds: relatedJtbds,
     complexity: /bulk|批量|blocked|前置|async|状态/i.test(text) ? "high" : "medium",
     priority: "primary",

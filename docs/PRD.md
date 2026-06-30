@@ -15,7 +15,7 @@ Generate one high-quality screen-level UX Flow Spec for one selected key flow fr
 ## Users
 
 - Primary: UX designers preparing prototype-ready specs.
-- Secondary: Codex/prototype agents consuming JSON + brief.
+- Secondary: Codex/prototype agents consuming handoff JSON + `prototype-handoff.md`.
 - Tertiary: reviewers, PMs, and managers checking flow quality and boundaries.
 
 ## MVP Inputs
@@ -41,13 +41,13 @@ Optional:
 
 1. Start and verify source bundle.
 2. Extract candidate flows.
-3. Prepare selected flow into `flow-prep`.
+3. Prepare selected flow into `_internal/flow-prep`.
 4. Get designer confirmation for the preparation brief.
 5. Generate `ux-flow-spec.json`.
-6. Render Markdown, traceability, and prototype brief draft from JSON.
+6. Render internal Markdown and traceability from JSON.
 7. Run deterministic validation and qualitative review.
 8. Auto-revise deterministic low-risk issues.
-9. Generate prototype handoff files when quality gates pass.
+9. Generate deterministic prototype handoff files when quality gates pass.
 
 ## Key Product Decisions
 
@@ -59,7 +59,7 @@ Optional:
 - `flow-prep` is a designer-confirmable compilation plan, not final spec.
 - `flow_ui_grammar` governs flow-level consistency for layouts, component families, interactions, and content conventions.
 - `ux-flow-spec.json` is the source of truth.
-- `traceability.md`, `ux-flow-spec.md`, and brief artifacts are generated from JSON.
+- `_internal/traceability.md`, `_internal/ux-flow-spec.md`, and `handoff/prototype-handoff.md` are generated from JSON.
 - `revision-log.md` is append-only.
 
 ## Non-Goals

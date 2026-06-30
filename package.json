@@ -17,8 +17,8 @@
     "ux-spec:handoff-prototype": "node scripts/handoff-prototype.js",
     "validate:plugin": "${PYTHON_BIN:-python3} /Users/GuanchengDing/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .",
     "validate:skill": "${PYTHON_BIN:-python3} /Users/GuanchengDing/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/ux-flow-spec",
-    "validate:sample": "node scripts/validate-flow-prep.js examples/porting-automation-tango-tmo/expected/flow-prep.json && node scripts/validate-flowspec.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json",
-    "render:sample": "node scripts/render-flowspec-md.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/ux-flow-spec.md && node scripts/generate-traceability.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/traceability.md && node scripts/generate-prototype-brief.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/prototype-brief.draft.md"
+    "validate:sample": "node scripts/validate-flow-prep.js examples/porting-automation-tango-tmo/expected/_internal/flow-prep.json && node scripts/validate-flowspec.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --prep examples/porting-automation-tango-tmo/expected/_internal/flow-prep.json",
+    "render:sample": "node scripts/render-flowspec-md.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/_internal/ux-flow-spec.md && node scripts/generate-traceability.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/_internal/traceability.md && node scripts/render-prototype-handoff.js examples/porting-automation-tango-tmo/expected/ux-flow-spec.json --out examples/porting-automation-tango-tmo/expected/handoff/prototype-handoff.md"
   },
   "dependencies": {
     "ajv": "^8.17.1"

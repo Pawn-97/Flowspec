@@ -3,7 +3,7 @@ import path from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
-import { appendText, hasFlag, readJson, writeJson } from "./lib/io.js";
+import { appendText, hasFlag, internalDir, readJson, writeJson } from "./lib/io.js";
 import { today } from "./lib/source-bundle.js";
 
 const execFileAsync = promisify(execFile);
@@ -20,7 +20,8 @@ if (!auto) {
 }
 
 const specPath = path.join(flowSpecDir, "ux-flow-spec.json");
-const review = await readJson(path.join(flowSpecDir, "ux-flow-spec-review.json"));
+const auditDir = internalDir(flowSpecDir);
+const review = await readJson(path.join(auditDir, "ux-flow-spec-review.json"));
 const spec = await readJson(specPath);
 let changed = false;
 const applied = [];
@@ -44,31 +45,25 @@ await execFileAsync(process.execPath, [
   path.join(root, "scripts", "render-flowspec-md.js"),
   specPath,
   "--out",
-  path.join(flowSpecDir, "ux-flow-spec.md")
+  path.join(auditDir, "ux-flow-spec.md")
 ]);
 await execFileAsync(process.execPath, [
   path.join(root, "scripts", "generate-traceability.js"),
   specPath,
   "--out",
-  path.join(flowSpecDir, "traceability.md")
-]);
-await execFileAsync(process.execPath, [
-  path.join(root, "scripts", "generate-prototype-brief.js"),
-  specPath,
-  "--out",
-  path.join(flowSpecDir, "prototype-brief.draft.md")
+  path.join(auditDir, "traceability.md")
 ]);
 await execFileAsync(process.execPath, [
   path.join(root, "scripts", "validate-flowspec.js"),
   specPath,
   "--prep",
-  path.join(flowSpecDir, "flow-prep.json"),
+  path.join(auditDir, "flow-prep.json"),
   "--out",
-  path.join(flowSpecDir, "validation-report.json")
+  path.join(auditDir, "validation-report.json")
 ]);
 
 await appendText(
-  path.join(flowSpecDir, "revision-log.md"),
+  path.join(auditDir, "revision-log.md"),
   [
     "",
     `## ${today()} Auto revision`,

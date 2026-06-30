@@ -25,8 +25,8 @@ Prioritize:
 
 ## Output
 
-- `flow-spec/flow-index.md`
-- `flow-spec/flow-candidates.json`
+- `flow-spec/_internal/flow-index.md`
+- `flow-spec/_internal/flow-candidates.json`
 
 ## Deterministic Script
 
@@ -38,6 +38,7 @@ node scripts/extract-flows.js <project-path> --out-dir flow-spec
 
 - Extract multiple candidate flows when present.
 - Require source section evidence for each candidate.
+- Declare entry, success exit, default path scope, included guardrails, excluded paths, and source trace for each candidate.
 - Mark suggested primary flow.
 - Do not generate full specs for multiple flows in MVP.
 - Ask the designer to choose one primary flow before `/ux-spec:prepare`.

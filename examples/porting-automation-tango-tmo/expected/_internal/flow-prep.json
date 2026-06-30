@@ -2,19 +2,49 @@
   "schema_version": "0.1",
   "project": {
     "id": "porting-automation-tango-tmo",
-    "name": "Porting Automation Tango TMO"
+    "name": "Porting Automation Tango Tmo"
   },
   "source_snapshot": {
-    "state.md": "sample",
-    "ux-onepage.md": "sample",
-    "decisions.md": "sample",
-    "questions.md": "sample",
-    "memory/constraints.md": "sample"
+    "state.md": "8d52131c30d53ef5ece2fc27f2fb3fe5750f66fcd56c76867f7cae58cc3779a1",
+    "ux-onepage.md": "8812fa9dae6c68dc805db7a67886e7b8c09e97ac117939d92dbe17c4c9589fd4",
+    "decisions.md": "072a105dd423044347f0d57ac012aa3f356808bd1eec961eb015d0190f76c039",
+    "questions.md": "385f9cd16b19f3d183b3b13f24758b04b160df33c312d43be26a87bd6d1c862d",
+    "memory/constraints.md": "d9ba3a0a78d3153b3044846f02846676b55ae8c63723a193866fc8e1b86d42f8",
+    "assumptions.md": "1fbdfdf781def48ddf8b1809e1e22ec135e6526032269db6075fd1c001cecb73",
+    "memory/terminology.md": "89a44b76408c7c356048f29c2038c337591319e4fa9d60ef02ac208fedd5fa4b",
+    "memory/baseline.md": "c1ce82c6e0395aeca615fed6ad7fc21dcaf16eb1a02a709215dfcd6a4bf45539"
   },
   "selected_flow": {
     "id": "submit-uk-mobile-esim-port-request",
     "name": "Submit UK Mobile-eSIM port request",
-    "goal": "Admin submits a UK Mobile-eSIM port request without opening a manual support ticket."
+    "goal": "Admin submits a UK Mobile-eSIM port request without opening a manual support ticket.",
+    "entry": "Port history > Port number",
+    "success_exit": "Submit success with order ID and Port history tracking entry",
+    "default_path_scope": "happy_path",
+    "included_guardrails": [
+      {
+        "id": "blocked-prerequisite-recovery",
+        "description": "Retain missing-address blocked state and external return behavior without expanding address creation."
+      },
+      {
+        "id": "per-item-validation-recovery",
+        "description": "Retain row-level correction states for number validation and pre-check failures."
+      }
+    ],
+    "excluded_paths": [
+      {
+        "id": "business-address-creation",
+        "description": "Address creation remains an external exit."
+      },
+      {
+        "id": "subscriber-creation",
+        "description": "Subscriber creation remains outside the selected port request flow."
+      },
+      {
+        "id": "us-tmo-fields",
+        "description": "US/TMO collection fields remain an open-question expansion, not part of the UK happy path."
+      }
+    ]
   },
   "product_context": {
     "domain": "B2B telecom admin",
@@ -22,7 +52,13 @@
     "flow_type": "multi-step wizard plus status tracking entry",
     "complexity": "high",
     "primary_user": "admin",
-    "data_patterns": ["bulk input", "per-item validation", "carrier grouping", "blocked prerequisites", "draft recovery"]
+    "data_patterns": [
+      "bulk input",
+      "per-item validation",
+      "carrier grouping",
+      "blocked prerequisites",
+      "draft recovery"
+    ]
   },
   "review_profiles": {
     "primary": "b2b-admin",
@@ -33,7 +69,11 @@
       "async-status-tracking",
       "blocked-prerequisite-recovery"
     ],
-    "excluded": ["consumer-onboarding", "marketing-site", "visual-brand-exploration"],
+    "excluded": [
+      "consumer-onboarding",
+      "marketing-site",
+      "visual-brand-exploration"
+    ],
     "confirmed_by_user": true,
     "confirmed_at": "2026-06-29"
   },
@@ -41,27 +81,43 @@
     "layout_patterns": [
       {
         "id": "wizard-decision-screen",
-        "used_for": ["select-number-type-country", "select-business-address"],
+        "used_for": [
+          "select-number-type-country",
+          "select-business-address"
+        ],
         "intent": "Single decision step with primary selector and secondary prerequisite guidance."
       },
       {
         "id": "bulk-workbench-screen",
-        "used_for": ["enter-port-in-numbers", "number-precheck-result", "assign-pac"],
+        "used_for": [
+          "enter-port-in-numbers",
+          "number-precheck-result",
+          "assign-pac"
+        ],
         "intent": "Input and parsed results visible together for batch correction."
       },
       {
         "id": "blocked-prerequisite-screen",
-        "used_for": ["no-verified-address", "missing-subscriber"],
+        "used_for": [
+          "no-verified-address",
+          "missing-subscriber"
+        ],
         "intent": "Explain missing prerequisite, external exit, draft preservation, and return behavior."
       },
       {
         "id": "review-submit-screen",
-        "used_for": ["review-port-request"],
+        "used_for": [
+          "review-port-request"
+        ],
         "intent": "Grouped review summary with risk warnings before final submit."
       },
       {
         "id": "status-entry-screen",
-        "used_for": ["submit-success", "carrier-fallback-ticket", "rejected-number-recovery"],
+        "used_for": [
+          "submit-success",
+          "carrier-fallback-ticket",
+          "rejected-number-recovery"
+        ],
         "intent": "Show submitted state, next tracking action, and recovery entry points."
       }
     ],
@@ -99,13 +155,19 @@
           "type": "screen",
           "ux_intent": "Choose an existing verified address for the selected country.",
           "layout_pattern_id": "wizard-decision-screen",
-          "component_families": ["selectable table/list", "blocked prerequisite callout", "external exit action"],
+          "component_families": [
+            "selectable table/list",
+            "blocked prerequisite callout",
+            "external exit action"
+          ],
           "layout_intent": {
             "screen_archetype": "decision",
             "primary_focus": "verified address selection",
             "secondary_focus": "prerequisite guidance"
           },
-          "risk_flags": ["blocked_prerequisite_possible"]
+          "risk_flags": [
+            "blocked_prerequisite_possible"
+          ]
         }
       ],
       "source_trace": [
@@ -129,25 +191,36 @@
           "type": "screen",
           "ux_intent": "Assign per-number or shared bulk PAC to eligible numbers.",
           "layout_pattern_id": "bulk-workbench-screen",
-          "component_families": ["per-item validation table", "bulk input with parsed preview"],
+          "component_families": [
+            "per-item validation table",
+            "bulk input with parsed preview"
+          ],
           "layout_intent": {
             "screen_archetype": "workbench",
             "primary_focus": "per-number PAC assignment",
             "secondary_focus": "shared bulk PAC shortcut"
           },
-          "risk_flags": ["bulk_operation", "per_item_validation"]
+          "risk_flags": [
+            "bulk_operation",
+            "per_item_validation"
+          ]
         },
         {
           "id": "schedule-port-date",
           "type": "screen",
           "ux_intent": "Choose target port date with cutoff and PAC expiry awareness.",
           "layout_pattern_id": "bulk-workbench-screen",
-          "component_families": ["per-item validation table"],
+          "component_families": [
+            "per-item validation table"
+          ],
           "layout_intent": {
             "screen_archetype": "workbench",
             "primary_focus": "date choice and eligibility warnings"
           },
-          "risk_flags": ["cutoff_validation", "pac_expiry"]
+          "risk_flags": [
+            "cutoff_validation",
+            "pac_expiry"
+          ]
         }
       ],
       "source_trace": [

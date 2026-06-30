@@ -5,7 +5,7 @@ Run deterministic validation and lint.
 ## Run
 
 ```bash
-node scripts/validate-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/flow-prep.json --out flow-spec/validation-report.json
+node scripts/validate-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/_internal/flow-prep.json --out flow-spec/_internal/validation-report.json
 ```
 
 ## Validation Order
@@ -20,7 +20,7 @@ node scripts/validate-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/f
 
 ## Output
 
-- `flow-spec/validation-report.json`
+- `flow-spec/_internal/validation-report.json`
 
 ## Failure Policy
 

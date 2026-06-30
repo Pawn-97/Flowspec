@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-import { writeFile } from "node:fs/promises";
-import { readJson, parseOutArg } from "./lib/io.js";
+import { readJson, parseOutArg, writeText } from "./lib/io.js";
 
 const input = process.argv[2];
 if (!input) {
@@ -42,4 +41,4 @@ for (const row of rows) {
 
 const out = parseOutArg(process.argv);
 if (!out) console.log(lines.join("\n"));
-else await writeFile(out, `${lines.join("\n")}\n`);
+else await writeText(out, lines.join("\n"));

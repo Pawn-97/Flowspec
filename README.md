@@ -56,13 +56,12 @@ Then continue with:
 ## Workflow
 
 1. `/ux-spec:start` checks the UX-partner bundle, source freshness, and current phase.
-2. `/ux-spec:extract-flows` identifies candidate flows.
-3. `/ux-spec:prepare <flow_id>` compiles the onepage flow into `flow-prep.json` and `flow-prep.md` for designer confirmation.
-4. `/ux-spec:generate` creates `ux-flow-spec.json`.
-5. Render scripts generate `ux-flow-spec.md`, `traceability.md`, and `prototype-brief.draft.md` from JSON.
-6. `/ux-spec:review` runs deterministic lint and current-agent qualitative review.
-7. `/ux-spec:revise --auto` fixes deterministic, low-risk issues.
-8. `/ux-spec:handoff-prototype` emits `prototype-brief.md` and `prototype-agent-prompt.md`.
+2. `/ux-spec:extract-flows` writes candidate flows to `flow-spec/_internal/`.
+3. `/ux-spec:prepare <flow_id>` compiles the selected flow into `flow-spec/_internal/flow-prep.json` and `flow-spec/_internal/flow-prep.md` for designer confirmation.
+4. `/ux-spec:generate` creates only `flow-spec/ux-flow-spec.json`.
+5. `/ux-spec:validate` and `/ux-spec:review` write audit artifacts under `flow-spec/_internal/`.
+6. `/ux-spec:revise --auto` fixes deterministic, low-risk issues and refreshes internal audit artifacts.
+7. `/ux-spec:handoff-prototype` refreshes `flow-spec/handoff/ux-flow-spec.json` and deterministic `flow-spec/handoff/prototype-handoff.md`.
 
 ## Output Artifacts
 
@@ -70,22 +69,24 @@ Then continue with:
 
 ```text
 flow-spec/
-├── state.md
-├── flow-index.md
-├── flow-candidates.json
-├── flow-prep.json
-├── flow-prep.md
 ├── ux-flow-spec.json
-├── ux-flow-spec.md
-├── traceability.md
-├── validation-report.json
-├── ux-flow-spec-review.json
-├── ux-flow-spec-review.md
-├── prototype-brief.draft.md
-├── prototype-brief.md
-├── prototype-agent-prompt.md
-└── revision-log.md
+├── handoff/
+│   ├── ux-flow-spec.json
+│   └── prototype-handoff.md
+└── _internal/
+    ├── flow-candidates.json
+    ├── flow-index.md
+    ├── flow-prep.json
+    ├── flow-prep.md
+    ├── ux-flow-spec.md
+    ├── traceability.md
+    ├── validation-report.json
+    ├── ux-flow-spec-review.json
+    ├── ux-flow-spec-review.md
+    └── revision-log.md
 ```
+
+Downstream prototype agents should read only the handoff folder by default. `_internal/` is for preparation, validation, review, traceability, and debugging.
 
 ## Golden Sample
 
@@ -133,6 +134,9 @@ Use the deterministic scripts for non-LLM stages:
 node scripts/start-flowspec.js examples/porting-automation-tango-tmo/input --out-dir /tmp/flow-spec --confirm
 node scripts/extract-flows.js examples/porting-automation-tango-tmo/input --out-dir /tmp/flow-spec
 node scripts/prepare-flow.js examples/porting-automation-tango-tmo/input submit-uk-mobile-esim-port-request --out-dir /tmp/flow-spec --confirm
+node scripts/validate-flowspec.js /tmp/flow-spec/ux-flow-spec.json --prep /tmp/flow-spec/_internal/flow-prep.json --out /tmp/flow-spec/_internal/validation-report.json
+node scripts/run-review.js /tmp/flow-spec
+node scripts/handoff-prototype.js /tmp/flow-spec
 ```
 
 After `ux-flow-spec.json` exists, validation, review, revise, and handoff are also deterministic scripts. They do not call external LLMs or APIs.

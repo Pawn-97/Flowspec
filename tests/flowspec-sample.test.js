@@ -13,16 +13,25 @@ async function readJson(file) {
   return JSON.parse(await readFile(path.join(expected, file), "utf8"));
 }
 
+async function readInternalJson(file) {
+  return readJson(path.join("_internal", file));
+}
+
 test("golden flow candidates include primary submit flow", async () => {
-  const candidates = await readJson("flow-candidates.json");
+  const candidates = await readInternalJson("flow-candidates.json");
   const result = await validateWithSchema("flow-candidates.schema.json", candidates);
   assert.equal(result.valid, true);
 
-  assert.ok(candidates.candidates.some((flow) => flow.id === "submit-uk-mobile-esim-port-request"));
+  const flow = candidates.candidates.find((candidate) => candidate.id === "submit-uk-mobile-esim-port-request");
+  assert.ok(flow);
+  assert.equal(flow.default_path_scope, "happy_path");
+  assert.ok(flow.success_exit);
+  assert.ok(flow.included_guardrails.length > 0);
+  assert.ok(flow.excluded_paths.length > 0);
 });
 
 test("flow prep infers B2B profiles and flow UI grammar", async () => {
-  const prep = await readJson("flow-prep.json");
+  const prep = await readInternalJson("flow-prep.json");
   const result = await validateWithSchema("flow-prep.schema.json", prep);
   assert.equal(result.valid, true);
 
@@ -35,7 +44,7 @@ test("flow prep infers B2B profiles and flow UI grammar", async () => {
 });
 
 test("flow prep protects external exits and open questions", async () => {
-  const prep = await readJson("flow-prep.json");
+  const prep = await readInternalJson("flow-prep.json");
 
   const addressExit = prep.external_exits.find((item) => item.id === "external-business-address-documents");
   assert.equal(addressExit.must_not_expand, true);
@@ -53,6 +62,8 @@ test("ux flow spec validates source trace and flow consistency", async () => {
   for (const screen of spec.screens) {
     assert.ok(screen.source_trace.length > 0, `${screen.id} missing source trace`);
     assert.ok(screen.layout_pattern_id, `${screen.id} missing layout pattern`);
+    assert.equal(screen.path_role, "happy_path_step");
+    assert.ok(screen.components.every((component) => component.shadcn_target), `${screen.id} missing shadcn target`);
   }
 
   const consistencyIssues = lintFlowConsistency(spec);
@@ -76,7 +87,7 @@ test("ux flow spec preserves B2B critical behaviors", async () => {
 });
 
 test("review output uses structured issues", async () => {
-  const review = await readJson("ux-flow-spec-review.json");
+  const review = await readInternalJson("ux-flow-spec-review.json");
   const result = await validateWithSchema("ux-flow-spec-review.schema.json", review);
   assert.equal(result.valid, true);
   assert.ok(review.issues.every((issue) => issue.evidence && issue.impact && issue.recommended_fix));

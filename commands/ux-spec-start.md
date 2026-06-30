@@ -19,17 +19,15 @@ Initialize a Flowspec workspace from a UX-partner project.
    - `memory/terminology.md`
    - `memory/baseline.md`
 3. Inspect `state.md` for confirmed phases and stale flags.
-4. Create `flow-spec/` if missing.
+4. Create `flow-spec/_internal/` if missing.
 5. Compute source snapshot hashes for required and recommended files.
 6. Infer product context and review profiles from source evidence.
 7. Present the inferred context and profiles for designer confirmation.
-8. Write or update `flow-spec/state.md` after confirmation.
-9. Append `revision-log.md`.
+8. Append `flow-spec/_internal/revision-log.md`.
 
 ## Output
 
-- `flow-spec/state.md`
-- `flow-spec/revision-log.md`
+- `flow-spec/_internal/revision-log.md`
 
 ## Deterministic Script
 

@@ -36,7 +36,7 @@ Interactions:
 States:
 - no-verified-address (blocked): No verified business address is available for this country.
 
-Prototype instruction: Show a verified-address selector and a blocked empty state that offers external exit plus draft return behavior.
+Prototype instruction: Show a verified-address selector and a blocked empty state that offers external exit plus draft return behavior. Include visible default, loading or error states, primary action behavior, and recovery affordances already defined in this JSON.
 
 ### Enter port-in numbers
 
@@ -53,7 +53,7 @@ Interactions:
 States:
 - number-format-error (error): Some numbers need correction before pre-check.
 
-Prototype instruction: Show bulk input with parsed preview and row-level validation; do not collapse all errors into one alert.
+Prototype instruction: Show bulk input with parsed preview and row-level validation; do not collapse all errors into one alert. Include visible default, loading or error states, primary action behavior, and recovery affordances already defined in this JSON.
 
 ### Number pre-check result
 
@@ -69,7 +69,7 @@ Interactions:
 States:
 - partial-precheck-failure (error): Some numbers failed eligibility or duplicate checks.
 
-Prototype instruction: Show loading, grouped pass/fail results, per-row issue text, and row-level recovery actions.
+Prototype instruction: Show loading, grouped pass/fail results, per-row issue text, and row-level recovery actions. Include visible default, loading or error states, primary action behavior, and recovery affordances already defined in this JSON.
 
 ### Review port request
 
@@ -85,7 +85,7 @@ Interactions:
 States:
 - pac-expiry-warning (warning): Some PAC codes are close to expiry.
 
-Prototype instruction: Show grouped carrier/request summary, high-risk warnings above submit, and edit links back to affected steps.
+Prototype instruction: Show grouped carrier/request summary, high-risk warnings above submit, and edit links back to affected steps. Include visible default, loading or error states, primary action behavior, and recovery affordances already defined in this JSON.
 
 ### Submit success
 
@@ -101,7 +101,7 @@ Interactions:
 States:
 - carrier-api-fallback (partial_success): Carrier API is unavailable for one group; a fallback ticket was created.
 
-Prototype instruction: Show order ID, confirmation email expectation, Port history action, and fallback ticket state if applicable.
+Prototype instruction: Show order ID, confirmation email expectation, Port history action, and fallback ticket state if applicable. Include visible default, loading or error states, primary action behavior, and recovery affordances already defined in this JSON.
 
 ## 5. Do Not Design
 - Business address creation and KYC: D4 marks it as prerequisite only.

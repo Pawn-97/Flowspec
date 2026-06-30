@@ -4,9 +4,9 @@ Review a generated FlowSpec with deterministic findings plus current-agent quali
 
 ## Inputs
 
-- `flow-spec/flow-prep.json`
+- `flow-spec/_internal/flow-prep.json`
 - `flow-spec/ux-flow-spec.json`
-- `flow-spec/validation-report.json`
+- `flow-spec/_internal/validation-report.json`
 - rule manifests under `rules/`
 
 ## Steps
@@ -14,12 +14,12 @@ Review a generated FlowSpec with deterministic findings plus current-agent quali
 1. Run `/ux-spec:validate`.
 2. Run deterministic review packaging:
    ```bash
-   node scripts/review-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/flow-prep.json --validation flow-spec/validation-report.json --out flow-spec/review-input.json
+   node scripts/review-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/_internal/flow-prep.json --validation flow-spec/_internal/validation-report.json --out flow-spec/_internal/review-input.json
    ```
 3. Current Codex agent performs qualitative review using `review-input.json`.
 4. Write structured review:
-   - `flow-spec/ux-flow-spec-review.json`
-   - `flow-spec/ux-flow-spec-review.md`
+   - `flow-spec/_internal/ux-flow-spec-review.json`
+   - `flow-spec/_internal/ux-flow-spec-review.md`
 5. If low-risk auto-fixable issues exist, run `/ux-spec:revise --auto` once, then validate again.
 
 ## Deterministic Script

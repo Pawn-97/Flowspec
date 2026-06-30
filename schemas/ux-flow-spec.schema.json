@@ -2,13 +2,28 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://flowspec.local/schemas/ux-flow-spec.schema.json",
   "type": "object",
-  "required": ["schema_version", "project", "flow", "review_profiles", "flow_ui_grammar", "screens"],
+  "required": [
+    "schema_version",
+    "project",
+    "flow",
+    "review_profiles",
+    "flow_ui_grammar",
+    "path_scope",
+    "prototype_surface",
+    "artifact_contract",
+    "acceptance_contract",
+    "screens"
+  ],
   "properties": {
     "schema_version": { "type": "string" },
     "project": { "type": "object", "required": ["id"], "additionalProperties": true },
     "flow": { "type": "object", "required": ["id", "name", "goal"], "additionalProperties": true },
     "review_profiles": { "type": "object", "required": ["primary", "secondary", "excluded"], "additionalProperties": true },
     "flow_ui_grammar": { "type": "object", "required": ["layout_patterns", "component_families"], "additionalProperties": true },
+    "path_scope": { "$ref": "#/$defs/pathScope" },
+    "prototype_surface": { "$ref": "#/$defs/prototypeSurface" },
+    "artifact_contract": { "$ref": "#/$defs/artifactContract" },
+    "acceptance_contract": { "$ref": "#/$defs/acceptanceContract" },
     "source_context": { "type": "object", "additionalProperties": true },
     "screens": {
       "type": "array",
@@ -19,6 +34,7 @@
           "id",
           "title",
           "type",
+          "path_role",
           "layout_pattern_id",
           "source_trace",
           "page_purpose",
@@ -32,6 +48,10 @@
           "id": { "type": "string" },
           "title": { "type": "string" },
           "type": { "type": "string" },
+          "path_role": {
+            "type": "string",
+            "enum": ["happy_path_step", "guardrail_state", "requested_expansion", "out_of_scope_reference"]
+          },
           "layout_pattern_id": { "type": "string" },
           "source_trace": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceTrace" } },
           "user_intent": { "type": "string" },
@@ -41,12 +61,13 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "type", "component_family", "role"],
+              "required": ["id", "type", "component_family", "role", "shadcn_target"],
               "properties": {
                 "id": { "type": "string" },
                 "type": { "type": "string" },
                 "component_family": { "type": "string" },
                 "role": { "type": "string" },
+                "shadcn_target": { "$ref": "#/$defs/shadcnTarget" },
                 "data": { "type": "object", "additionalProperties": true },
                 "states": { "type": "array", "items": { "type": "string" } },
                 "content": { "type": "object", "additionalProperties": true },
@@ -104,6 +125,146 @@
   },
   "additionalProperties": true,
   "$defs": {
+    "pathScope": {
+      "type": "object",
+      "required": ["default_branch_coverage", "included_guardrails", "excluded_paths", "expansion_policy"],
+      "properties": {
+        "default_branch_coverage": {
+          "type": "string",
+          "enum": ["happy_path", "happy_path_with_guardrails", "requested_expansion"]
+        },
+        "included_guardrails": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contractItem" }
+        },
+        "excluded_paths": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contractItem" }
+        },
+        "expansion_policy": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "prototypeSurface": {
+      "type": "object",
+      "required": ["ui_library", "target_selection_order", "block_strategy", "skeleton_status"],
+      "properties": {
+        "ui_library": { "type": "string" },
+        "target_selection_order": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "block_strategy": { "type": "string" },
+        "skeleton_status": {
+          "type": "string",
+          "enum": ["none", "draft_pending_user_approval", "approved_default"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "artifactContract": {
+      "type": "object",
+      "required": ["canonical_source", "handoff_files", "internal_audit_directory"],
+      "properties": {
+        "canonical_source": { "type": "string" },
+        "handoff_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "internal_audit_directory": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "acceptanceContract": {
+      "type": "object",
+      "required": ["implementation_evidence_required", "checks"],
+      "properties": {
+        "implementation_evidence_required": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/acceptanceCheckId" },
+              {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": { "$ref": "#/$defs/acceptanceCheckId" },
+                  "notes": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
+            ]
+          }
+        },
+        "additional_text_checks": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "acceptanceCheckId": {
+      "type": "string",
+      "enum": [
+        "every_happy_path_step_screen_is_implemented",
+        "every_required_component_has_mapping",
+        "block_targets_attempted_before_component_composition",
+        "custom_components_require_custom_reason",
+        "excluded_paths_not_implemented",
+        "no_backend_or_api_integration"
+      ]
+    },
+    "shadcnTarget": {
+      "type": "object",
+      "required": ["strategy", "targets", "fallback"],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["block", "component", "custom"]
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "fallback": { "type": "string" },
+        "notes": { "type": "string" },
+        "custom_reason": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "strategy": { "const": "custom" } },
+            "required": ["strategy"]
+          },
+          "then": { "required": ["custom_reason"] }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "contractItem": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": { "type": "string" },
+            "description": { "type": "string" },
+            "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
     "sourceTrace": {
       "type": "object",
       "required": ["source_file", "section", "claim"],

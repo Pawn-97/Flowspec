@@ -20,12 +20,34 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "name", "entry", "exit", "source_trace"],
+        "required": [
+          "id",
+          "name",
+          "entry",
+          "success_exit",
+          "default_path_scope",
+          "included_guardrails",
+          "excluded_paths",
+          "source_trace"
+        ],
         "properties": {
           "id": { "type": "string" },
           "name": { "type": "string" },
           "entry": { "type": "string" },
           "exit": { "type": "string" },
+          "success_exit": { "type": "string" },
+          "default_path_scope": {
+            "type": "string",
+            "enum": ["happy_path", "happy_path_with_guardrails", "requested_expansion"]
+          },
+          "included_guardrails": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/contractItem" }
+          },
+          "excluded_paths": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/contractItem" }
+          },
           "related_jtbds": { "type": "array", "items": { "type": "string" } },
           "complexity": { "type": "string" },
           "priority": { "type": "string" },
@@ -42,6 +64,21 @@
   },
   "additionalProperties": true,
   "$defs": {
+    "contractItem": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": { "type": "string" },
+            "description": { "type": "string" },
+            "source_trace": { "type": "array", "items": { "$ref": "#/$defs/sourceTrace" } }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
     "sourceTrace": {
       "type": "object",
       "required": ["source_file", "section", "claim"],

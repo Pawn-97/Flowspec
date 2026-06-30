@@ -4,9 +4,9 @@ Revise generated FlowSpec artifacts from structured review results.
 
 ## Inputs
 
-- `flow-spec/ux-flow-spec-review.json`
+- `flow-spec/_internal/ux-flow-spec-review.json`
 - `flow-spec/ux-flow-spec.json`
-- `flow-spec/flow-prep.json`
+- `flow-spec/_internal/flow-prep.json`
 
 ## Auto Mode
 
@@ -40,9 +40,9 @@ Maximum automatic revision passes: 2.
 
 ## After Revision
 
-Regenerate rendered artifacts and rerun validation.
+Regenerate internal rendered artifacts and rerun validation.
 
-Append `revision-log.md`.
+Append `flow-spec/_internal/revision-log.md`.
 
 ## Deterministic Script
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import path from "node:path";
-import { readJson, writeJson, writeText } from "./lib/io.js";
+import { internalDir, readJson, writeJson, writeText } from "./lib/io.js";
 
 const flowSpecDir = process.argv[2];
 if (!flowSpecDir) {
@@ -52,9 +52,10 @@ function scoreReview(issues) {
 }
 
 const spec = await readJson(path.join(flowSpecDir, "ux-flow-spec.json"));
+const auditDir = internalDir(flowSpecDir);
 let validation = { status: "pass", issues: [] };
 try {
-  validation = await readJson(path.join(flowSpecDir, "validation-report.json"));
+  validation = await readJson(path.join(auditDir, "validation-report.json"));
 } catch {
   validation = { status: "pass", issues: [] };
 }
@@ -95,6 +96,6 @@ const markdown = [
     : ["No deterministic or craft issues found."])
 ];
 
-await writeJson(path.join(flowSpecDir, "ux-flow-spec-review.json"), review);
-await writeText(path.join(flowSpecDir, "ux-flow-spec-review.md"), markdown.join("\n"));
+await writeJson(path.join(auditDir, "ux-flow-spec-review.json"), review);
+await writeText(path.join(auditDir, "ux-flow-spec-review.md"), markdown.join("\n"));
 console.log(JSON.stringify({ status: "ok", score, blockers, issues: issues.length }, null, 2));

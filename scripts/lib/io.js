@@ -38,3 +38,11 @@ export function parseNamedArg(argv, name) {
 export function hasFlag(argv, name) {
   return argv.includes(name);
 }
+
+export function internalDir(flowSpecDir) {
+  return path.join(flowSpecDir, "_internal");
+}
+
+export function handoffDir(flowSpecDir) {
+  return path.join(flowSpecDir, "handoff");
+}

@@ -18,8 +18,17 @@ const issues = [...schemaResult.errors];
 
 const screenIds = new Set((spec.screens || []).map((screen) => screen.id));
 const terminalDestinations = new Set(["external_exit", "terminal_outcome", "system_action", "stay_on_current_screen"]);
+const defaultPathScope = spec.path_scope?.default_branch_coverage;
 
 for (const screen of spec.screens || []) {
+  if (defaultPathScope === "happy_path" && screen.path_role === "requested_expansion") {
+    issues.push(issue("critical", "path-scope", `Screen ${screen.id} is a requested expansion but path_scope is happy_path.`, {
+      rule_id: "PATH_SCOPE_001",
+      screen_id: screen.id,
+      auto_fixable: false
+    }));
+  }
+
   if (!sourceTracePresent(screen)) {
     issues.push(issue("critical", "traceability", `Screen ${screen.id} is missing source_trace.`, {
       rule_id: "TRACE_SCREEN_001",

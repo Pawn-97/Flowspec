@@ -38,7 +38,7 @@ Commands are Markdown workflow instructions for Codex. Deterministic Node script
 node scripts/start-flowspec.js <project-path> --out-dir flow-spec --confirm
 node scripts/extract-flows.js <project-path> --out-dir flow-spec
 node scripts/prepare-flow.js <project-path> <flow_id> --out-dir flow-spec --confirm
-node scripts/validate-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/flow-prep.json --out flow-spec/validation-report.json
+node scripts/validate-flowspec.js flow-spec/ux-flow-spec.json --prep flow-spec/_internal/flow-prep.json --out flow-spec/_internal/validation-report.json
 node scripts/run-review.js flow-spec
 node scripts/revise-flowspec.js flow-spec --auto
 node scripts/handoff-prototype.js flow-spec
@@ -48,14 +48,12 @@ node scripts/handoff-prototype.js flow-spec
 
 ```text
 UX-partner project bundle
-  -> flow-candidates.json
-  -> flow-prep.json + flow-prep.md
+  -> _internal/flow-candidates.json + _internal/flow-index.md
+  -> _internal/flow-prep.json + _internal/flow-prep.md
   -> ux-flow-spec.json
-  -> ux-flow-spec.md
-  -> traceability.md
-  -> prototype-brief.draft.md
-  -> prototype-brief.md
-  -> prototype-agent-prompt.md
+  -> _internal/ux-flow-spec.md + _internal/traceability.md
+  -> _internal/validation-report.json + _internal/ux-flow-spec-review.*
+  -> handoff/ux-flow-spec.json + handoff/prototype-handoff.md
 ```
 
 ## Flow Preparation
@@ -119,8 +117,12 @@ Handoff requires:
 - validation pass
 - no blockers
 - review score >= 80
-- `ux-flow-spec.json`
-- `traceability.md`
-- `prototype-brief.md`
-- `prototype-agent-prompt.md`
-- current `revision-log.md`
+- `flow-spec/ux-flow-spec.json`
+- `flow-spec/_internal/validation-report.json`
+- `flow-spec/_internal/ux-flow-spec-review.json`
+- current `flow-spec/_internal/revision-log.md`
+
+Handoff refreshes only:
+
+- `flow-spec/handoff/ux-flow-spec.json`
+- `flow-spec/handoff/prototype-handoff.md`

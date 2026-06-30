@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import path from "node:path";
-import { readJson, hasFlag, parseNamedArg, writeJson, writeText } from "./lib/io.js";
+import { readJson, hasFlag, internalDir, parseNamedArg, writeJson, writeText } from "./lib/io.js";
 import { buildFlowUiGrammar, inferReviewProfiles, loadSourceBundle, today, trace } from "./lib/source-bundle.js";
 
 const projectPath = process.argv[2];
 const flowId = process.argv[3];
-const outDir = parseNamedArg(process.argv, "--out-dir") || path.join(projectPath || "", "flow-spec");
+const flowSpecDir = parseNamedArg(process.argv, "--out-dir") || path.join(projectPath || "", "flow-spec");
+const outDir = internalDir(flowSpecDir);
 const confirmed = hasFlag(process.argv, "--confirm");
 
 if (!projectPath || !flowId) {
@@ -26,7 +27,12 @@ function buildPrep(bundle, selectedFlow, confirmedByUser) {
     selected_flow: {
       id: selectedFlow.id,
       name: selectedFlow.name,
-      goal: "Admin submits a UK Mobile-eSIM port request without opening a manual support ticket."
+      goal: "Admin submits a UK Mobile-eSIM port request without opening a manual support ticket.",
+      entry: selectedFlow.entry,
+      success_exit: selectedFlow.success_exit || selectedFlow.exit,
+      default_path_scope: selectedFlow.default_path_scope || "happy_path",
+      included_guardrails: selectedFlow.included_guardrails || [],
+      excluded_paths: selectedFlow.excluded_paths || []
     },
     product_context: {
       domain: "B2B telecom admin",

@@ -4,14 +4,14 @@ Compile a selected UX-partner onepage flow into a designer-confirmable Flow Prep
 
 ## Inputs
 
-- `flow-spec/flow-candidates.json`
+- `flow-spec/_internal/flow-candidates.json`
 - selected `flow_id`
 - UX-partner source bundle
 
 ## Generate
 
-- `flow-spec/flow-prep.json`
-- `flow-spec/flow-prep.md`
+- `flow-spec/_internal/flow-prep.json`
+- `flow-spec/_internal/flow-prep.md`
 
 ## Deterministic Script
 
@@ -69,5 +69,5 @@ Only ask for confirmation on material semantic questions:
 Run:
 
 ```bash
-node scripts/validate-flow-prep.js flow-spec/flow-prep.json
+node scripts/validate-flow-prep.js flow-spec/_internal/flow-prep.json
 ```
